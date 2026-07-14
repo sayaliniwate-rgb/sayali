@@ -1,0 +1,74 @@
+<div class="cloud">☁️</div>
+
+
+<h1>🍎 Math Treasure Game 🍎</h1>
+
+
+<h2 id="question">
+Round 1 of 5<br>
+Count the Apples
+</h2>
+
+
+<div id="apples"></div>
+
+
+<div id="options"></div>
+
+
+<h2 id="result"></h2>
+
+
+<div class="info">
+
+⭐ Score:
+<span id="score">0</span>
+
+<br><br>
+
+🏅 Badge:
+<span id="badge">Beginner</span>
+
+<br><br>
+
+🎯 Round:
+<span id="round">1</span>/5
+
+</div>
+
+
+<br><br>
+
+
+<button onclick="musicControl()">
+🎵 Music On / Off
+</button>
+
+
+<audio id="music" loop>
+
+<source src="music.mp3" type="audio/mpeg">
+
+</audio>
+
+
+<div id="gameOver">
+
+<h1>🎉 Game Over 🎉</h1>
+
+<h2>Your Score</h2>
+
+<h1 id="finalScore"></h1>
+
+<h2 id="finalMessage"></h2>
+
+
+<button onclick="location.reload()">
+🔄 Play Again
+</button>
+
+
+</div>
+
+
+<script>
