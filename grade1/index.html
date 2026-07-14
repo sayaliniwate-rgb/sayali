@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Senior KG Math Fun Game</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+
+body {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    font-family: "Comic Sans MS", Arial;
+    background: linear-gradient(#87CEEB, #FFF8DC);
+    min-height: 100vh;
+}
+
+/* Title */
+h1 {
+    color: #ff5722;
+    font-size: 45px;
+}
+
+/* Question */
+#question {
+    color: #1565c0;
+    font-size: 30px;
+}
+
+/* Apples */
+#apples {
+    font-size: 70px;
+    min-height: 100px;
+    margin: 20px;
+}
+
+.apple {
+    display: inline-block;
+    animation: bounce 0.8s infinite alternate;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-20px);
+    }
+}
+
+
+/* Answer buttons */
+button {
+
+    background: #4CAF50;
+    color: white;
+    border: none;
+
+    padding: 15px 30px;
+    margin: 10px;
+
+    border-radius: 20px;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+
+button:hover {
+
+    background:#2E7D32;
+    transform:scale(1.1);
+
+}
+
+
+/* Result */
+
+#result {
+
+    font-size:40px;
+    height:60px;
+
+}
+
+
+/* Score */
+
+.info {
+
+    background:white;
+
+    display:inline-block;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    font-size:28px;
+
+    color:#1565c0;
+
+    margin-top:20px;
+
+}
+
+
+/* Clouds */
+
+.cloud {
+
+    position:absolute;
+
+    font-size:50px;
+
+    animation:moveCloud 15s linear infinite;
+
+}
+
+@keyframes moveCloud {
+
+from {
+left:-100px;
+}
+
+to {
+left:100%;
+}
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="cloud" style="top:50px;">☁️</div>
+
+
+<h1>🍎 Math Treasure Game 🍎</h1>
+
+
+<h2 id="question">
+Count the Apples
+</h2>
+
+
+<div id="apples"></div>
+
+
+<div id="options"></div>
+
+
+<h2 id="result"></h2>
+
+
+
+<div class="info">
+
+⭐ Score:
+<span id="score">0</span>
+
+<br><br>
+
+🏅 Badge:
+<span id="badge">Beginner</span>
+
+</div>
+
+
+<br><br>
+
+
+<button onclick="musicControl()">
+🎵 Music On / Off
+</button>
+
+
+
+<audio id="music" loop>
+
+<!-- Add your music file name here -->
+
+<source src="music.mp3" type="audio/mpeg">
+
+</audio>
+
+
+
+<script>
+
+
+let answer = 0;
+
+let score = 0;
+
+
+let music = document.getElementById("music");
+
+
+
+/* Voice */
+
+function speak(text){
+
+    let voice = new SpeechSynthesisUtterance(text);
+
+    voice.rate = 0.8;
+
+    voice.pitch = 1.3;
+
+    speechSynthesis.speak(voice);
+
+}
+
+
+
+/* New Question */
+
+function newQuestion(){
+
+
+    answer = Math.floor(Math.random()*10)+1;
+
+
+    let apples="";
+
+
+    for(let i=0;i<answer;i++){
+
+        apples += "<span class='apple'>🍎</span>";
+
+    }
+
+
+    document.getElementById("apples").innerHTML=apples;
+
+
+
+    speak("How many apples are there?");
+
+
+    let choices=[answer];
+
+
+    while(choices.length<4){
+
+        let n=Math.floor(Math.random()*10)+1;
+
+
+        if(!choices.includes(n)){
+
+            choices.push(n);
+
+        }
+
+    }
+
+
+    choices.sort(()=>Math.random()-0.5);
+
+
+
+    let html="";
+
+
+    choices.forEach(function(num){
+
+        html += 
+        `<button onclick="checkAnswer(${num})">
+        ${num}
+        </button>`;
+
+    });
+
+
+
+    document.getElementById("options").innerHTML=html;
+
+
+    document.getElementById("result").innerHTML="";
+
+
+}
+
+
+
+
+/* Check Answer */
+
+function checkAnswer(num){
+
+
+    if(num==answer){
+
+
+        score++;
+
+
+        document.getElementById("result").innerHTML=
+        "🎉 Excellent!";
+
+
+        document.getElementById("result").style.color="green";
+
+
+        speak("Excellent!");
+
+
+        celebrate();
+
+
+    }
+
+    else{
+
+
+        document.getElementById("result").innerHTML=
+        "❌ Try Again";
+
+
+        document.getElementById("result").style.color="red";
+
+
+        speak("Try again");
+
+
+    }
+
+
+
+    document.getElementById("score").innerHTML=score;
+
+
+    updateBadge();
+
+
+
+    setTimeout(newQuestion,1500);
+
+
+}
+
+
+
+/* Badge System */
+
+function updateBadge(){
+
+
+    let badge="🙂 Beginner";
+
+
+    if(score>=5){
+
+        badge="🎖 Math Explorer";
+
+    }
+
+
+    if(score>=10){
+
+        badge="🌟 Math Champion";
+
+    }
+
+
+    if(score>=20){
+
+        badge="👑 Math Superstar";
+
+    }
+
+
+    document.getElementById("badge").innerHTML=badge;
+
+
+}
+
+
+
+/* Celebration */
+
+function celebrate(){
+
+
+confetti({
+
+    particleCount:150,
+
+    spread:100,
+
+    origin:{y:0.6}
+
+});
+
+
+}
+
+
+
+/* Music */
+
+function musicControl(){
+
+
+    if(music.paused){
+
+        music.play();
+
+        speak("Music started");
+
+    }
+
+    else{
+
+        music.pause();
+
+    }
+
+
+}
+
+
+
+/* Start Game */
+
+newQuestion();
+
+
+</script>
+
+
+</body>
+
+</html>
